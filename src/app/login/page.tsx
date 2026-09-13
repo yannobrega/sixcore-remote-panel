@@ -1,0 +1,2 @@
+import { currentUser } from "@/server/auth/session";import { redirect } from "next/navigation";import { LoginForm } from "@/components/LoginForm";
+export default async function LoginPage(){if(await currentUser())redirect("/dashboard");return <main className="login-page"><section className="login-card"><div className="brand-mark large">S</div><span className="eyebrow">SixCore Remote</span><h1>Acesso seguro à sua infraestrutura</h1><p className="muted">Entre com sua conta para gerenciar os roteadores autorizados.</p><LoginForm/></section></main>}

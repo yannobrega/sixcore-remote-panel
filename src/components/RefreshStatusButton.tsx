@@ -1,0 +1,3 @@
+"use client";
+import { useState } from "react";import { useRouter } from "next/navigation";
+export function RefreshStatusButton({id}:{id:string}){const [busy,setBusy]=useState(false);const [error,setError]=useState("");const r=useRouter();return <div><button className="primary small" disabled={busy} onClick={async()=>{setBusy(true);setError("");const res=await fetch(`/api/devices/${id}/status`,{method:"POST"});setBusy(false);if(!res.ok){setError("Falha ao consultar gateway");return}r.refresh()}}>{busy?"Verificando…":"Atualizar status"}</button>{error&&<span className="inline-error">{error}</span>}</div>}

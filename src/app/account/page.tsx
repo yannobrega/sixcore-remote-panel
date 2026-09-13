@@ -1,0 +1,2 @@
+import { requireUser } from "@/server/auth/session";import { AppShell } from "@/components/AppShell";import { ChangePasswordForm } from "@/components/ChangePasswordForm";
+export default async function Account(){const u=await requireUser();return <AppShell user={u}><header className="page-head"><div><span className="eyebrow">Conta</span><h1>Minha conta</h1><p>{u.name} · {u.email} · {u.role}</p></div></header><section className="panel"><h2>Alterar senha</h2><ChangePasswordForm/></section></AppShell>}
