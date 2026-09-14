@@ -33,3 +33,39 @@ export async function checkGatewayTcp(realIp: string, port: number, timeoutMs = 
     clearTimeout(timer);
   }
 }
+
+export type GatewaySshSession = {
+  token: string;
+  expiresAt: string;
+  websocketUrl: string;
+};
+
+export async function createGatewaySshSession(input: {
+  sessionId: string;
+  userId: string;
+  clientIp: string;
+  realIp: string;
+  port: number;
+  username: string;
+  password: string;
+}): Promise<GatewaySshSession> {
+  const config = gatewayConfig();
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 12_000);
+  try {
+    const response = await fetch(`${config.baseUrl}/private/v1/ssh/sessions`, {
+      method: "POST",
+      headers: { authorization: `Bearer ${config.apiKey}`, origin: config.origin, "content-type": "application/json" },
+      body: JSON.stringify(input),
+      signal: controller.signal,
+      cache: "no-store"
+    });
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({})) as { error?: string };
+      throw new Error(body.error || `gateway_http_${response.status}`);
+    }
+    return await response.json() as GatewaySshSession;
+  } finally {
+    clearTimeout(timer);
+  }
+}

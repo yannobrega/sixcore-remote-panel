@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import "./styles.css";
+import "@xterm/xterm/css/xterm.css";
 
 export const metadata = {
   title: "SixCore Remote",
